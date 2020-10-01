@@ -9,6 +9,10 @@ output:
 
 ## Discussion Sessions and Office Hours
 
+TA: Yidong Zhou (ydzhou@ucdavis.edu)
+
+We will use Piazza (access code "overdispersion" without the quotes) for this course to answer questions and facilitate discussion. Ask routine questions about course material and policies there; direct any sensitive or specifically personal matters to me or the instructor by email (**email please, not Canvas message**). In any emails, please include the text "**[STA138-FALL2020]**" (without the quotes) in the subject line.
+
 Discussion sessions: 
 
 - Thursdays 09:00-09:50 am PT: https://ucdstats.zoom.us/j/98190589653?pwd=K1lVTElLL1V0VVBNemd3RklxV1dXZz09
@@ -18,7 +22,7 @@ Office hours:
 
 - Tuesdays 09:00-11:00 am PT: https://ucdstats.zoom.us/j/99625197827?pwd=OTFJY2FSZmozWVppMm1CSm82cVhTUT09
 
-*All the above zoom links can be found in Canvas --> Syllabus*
+*All the above zoom links can be found in Canvas --> Syllabus.*
 
 ## Review
 
