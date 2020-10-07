@@ -1,0 +1,173 @@
+---
+title: "STA 138 Discussion 1 Solutions"
+author: "Fall 2020"
+header-includes:
+   - \usepackage{enumerate,graphicx}
+geometry: margin=0.5in
+output: pdf_document
+---
+
+```{r, echo = FALSE,warning = FALSE, message = FALSE}
+library(ggplot2)
+patients101 = read.csv("/home/andfarris/138-Fa20/labs/discussion1/patients101.csv")
+```
+
+1. (Note that solutions here illustrate both base R and ggplots; use of either or both is fine!)
+
+(a) 
+
+```{r, echo = FALSE,eval = TRUE}
+#Problem 1 (a)
+hist(patients101$sysBP, breaks=10, xlab = "Systolic Blood Pressure",main = "Distribution of Systolic Blood 
+     Pressure 1(a)")
+#ggplot(patients101, aes(x = sysBP)) + geom_histogram(binwidth = 5,color = "black",fill = "white")+
+#  xlab("Systolic Blood Pressure")+ggtitle("1(a): Distribution of systolic blood pressure")
+```
+
+(b) With the exception of a single relative outlier, the data appears fairly symmetric.
+
+\pagebreak
+
+(c) 
+
+
+```{r, echo = FALSE,eval = TRUE}
+#Problem 1 (c)
+boxplot(patients101$sysBP, horizontal = TRUE,main = "Distribution of Systolic Blood Pressure 1(c)")
+#ggplot(patients101, aes(y=sysBP, x = factor("")))+ geom_boxplot() + ylab("Systolic Blood Pressure") + xlab(" ")+ coord_flip() + ggtitle("1(a): Distribution of systolic blood pressure")
+```
+
+(d) There is one clear, unusually large observation apparent from the boxplot.  
+
+\newpage
+
+2.
+
+(a)
+
+```{r, echo = FALSE,eval = TRUE}
+#Problem 2 (a)
+plot(patients101$weight, patients101$sysBP, main = "2(a):Relationship between Systolic Blood 
+     Pressure and Weight",xlab = "Weight in pounds",ylab = "Systolic BP",pch = 19)
+#qplot(weight, sysBP, data = patients101) + ggtitle("2(a):Relationship between Systolic Blood Pressure and Weight") + xlab("Weight in pounds") + ylab("Systolic BP")
+```
+
+(b) There seems to be a slight positive trend; as weight increases, the average systolic blood pressure appears to increase slightly as well.
+
+(c) 
+
+```{r, echo = FALSE,eval = TRUE}
+#Problem 2 (c)
+plot(patients101$sedmins, patients101$sysBP, main = "2(c):Relationship between Systolic Blood Pressure and Sedentary Minutes",xlab = "Sedentary Minutes",ylab = "Systolic BP",pch = 19)
+#qplot(sedmins, sysBP, data = patients101) + ggtitle("2(c):Relationship between Systolic Blood Pressure and Sedentary Minutes") + xlab("Sedentary Minutes") + ylab("Systolic BP")
+```
+
+(d) There does not seem to be a notable trend here.
+
+
+\pagebreak
+
+3. 
+
+(a) 
+
+```{r, echo = FALSE,eval = TRUE}
+#Problem 3 (a)
+#boxplot(sysBP ~ gender, data = patients101, main = "Blood Pressure by Gender",horizontal = TRUE)
+ggplot(patients101,aes(y = sysBP,x =gender)) + geom_boxplot() + ylab("Systolic Blood Pressure") + xlab("Gender") + ggtitle("Blood Pressure by Gender") + coord_flip() 
+```
+
+
+(b) The histogram for males and females appear to completely overlap, so they show no significant difference.
+
+(c)
+
+
+```{r, echo = FALSE, fig.height = 3, fig.width = 3.75, fig.align = "center", eval = TRUE}
+#Problem 3 (c)
+ggplot(patients101, aes(x = sysBP)) + geom_histogram(binwidth = 10,color = "black",fill = "white") + facet_grid(obese ~.) +ggtitle("Systolic Blood Pressure by Obesity")
+```
+
+(d) The 'Normal' weight category appears to have lower systolic blood pressures on average than 'obese' and 'overweight,' but there does not appear to be much of a difference between 'overweight' and 'obese.'
+
+
+\pagebreak
+
+4. 
+
+```{r, echo = FALSE}
+#Problem 4
+#part(a)
+aveBP = round(mean(patients101$sysBP),4)
+#part(b)
+all.ave = aggregate(sysBP ~ marriage, data = patients101, mean)
+#part(c)
+all.sd = aggregate(sysBP ~ marriage, data = patients101, sd)
+#part(d)
+all.n= aggregate(sysBP ~ marriage, data = patients101, length)
+#part(e)
+fns.weight = fivenum(patients101$weight)
+```
+
+(a) The average systolic blood pressure is: `r aveBP`.
+
+(b) A table of results follows:
+
+\begin{table}[ht!]
+\centering
+\begin{tabular}{rlr}
+  \hline
+ & marriage & ave sysBP \\ 
+  \hline
+1 & divorced & 133.50 \\ 
+  2 & married & 124.77 \\ 
+  3 & nevermarried & 115.50 \\ 
+  4 & other & 126.00 \\ 
+  5 & widowed & 132.75 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+(c) A table of results follows:
+
+\begin{table}[ht!]
+\centering
+\begin{tabular}{rlr}
+  \hline
+ & marriage & sd sysBP \\ 
+  \hline
+1 & divorced & 22.85 \\ 
+  2 & married & 21.34 \\ 
+  3 & nevermarried & 19.27 \\ 
+  4 & other & 22.21 \\ 
+  5 & widowed & 8.81 \\ 
+   \hline
+\end{tabular}
+\end{table}
+(d) A table of results follows: 
+\begin{table}[ht!]
+\centering
+\begin{tabular}{rlr}
+  \hline
+ & marriage & number \\ 
+  \hline
+1 & divorced &  12 \\ 
+  2 & married &  52 \\ 
+  3 & nevermarried &  16 \\ 
+  4 & other &  12 \\ 
+  5 & widowed &   8 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+(e) The five number summary is: `r fns.weight[1]` (min), `r fns.weight[2]` (Q2), `r fns.weight[3]` (Median), `r fns.weight[4]` (Q3), `r fns.weight[5]` (Max)
+
+
+\hrulefill
+\clearpage
+\begin{center} Code Appendix \end{center}
+\begin{verbatim}
+```{r, ref.label=knitr::all_labels(),echo=TRUE,eval=FALSE}
+```
+\end{verbatim}
+\end{enumerate}
