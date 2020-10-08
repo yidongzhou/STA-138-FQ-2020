@@ -1,27 +1,38 @@
 ---
 title: "STA 138 Discussion 1 Solutions"
 author: "Fall 2020"
-header-includes:
-   - \usepackage{enumerate,graphicx}
+header-includes: \usepackage{enumerate,graphicx}
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 geometry: margin=0.5in
-output: pdf_document
 ---
 
 ```{r, echo = FALSE,warning = FALSE, message = FALSE}
-library(ggplot2)
-patients101 = read.csv("/home/andfarris/138-Fa20/labs/discussion1/patients101.csv")
+setwd(dirname(rstudioapi::getSourceEditorContext()$path))# set working directory to source file location
+library(ggplot2)# Create Elegant Data Visualizations Using the Grammar of Graphics
+patients101 = read.csv("patients101.csv")# import patients101.csv
 ```
 
-1. (Note that solutions here illustrate both base R and ggplots; use of either or both is fine!)
+1. (Note that solutions here illustrate both base R and ggplot2; use of either or both is fine!)
+
+`ggplot2` is a data visualization package for the statistical programming language R. Created by Hadley Wickham in 2005, ggplot2 is an implementation of Leland Wilkinson's Grammar of Graphics—a general scheme for data visualization which breaks up graphs into semantic components such as scales and layers.
+
+For our discussions, we'll only use base R. However, you are highly encouraged to explore the usage of `ggplot2`.
 
 (a) 
+
+- `break`: a single number giving the number of cells for the histogram
+- `xlab`: x axis label
+- `main`: main title
 
 ```{r, echo = FALSE,eval = TRUE}
 #Problem 1 (a)
 hist(patients101$sysBP, breaks=10, xlab = "Systolic Blood Pressure",main = "Distribution of Systolic Blood 
      Pressure 1(a)")
 #ggplot(patients101, aes(x = sysBP)) + geom_histogram(binwidth = 5,color = "black",fill = "white")+
-#  xlab("Systolic Blood Pressure")+ggtitle("1(a): Distribution of systolic blood pressure")
+#xlab("Systolic Blood Pressure")+ggtitle("1(a): Distribution of systolic blood pressure")
 ```
 
 (b) With the exception of a single relative outlier, the data appears fairly symmetric.
@@ -30,11 +41,16 @@ hist(patients101$sysBP, breaks=10, xlab = "Systolic Blood Pressure",main = "Dist
 
 (c) 
 
+- `horizontal`: logical indicating if the boxplots should be horizontal; default FALSE means vertical boxes.
+- `main`: main title
+
+![understanding boxplot](boxplot.png)
 
 ```{r, echo = FALSE,eval = TRUE}
 #Problem 1 (c)
 boxplot(patients101$sysBP, horizontal = TRUE,main = "Distribution of Systolic Blood Pressure 1(c)")
-#ggplot(patients101, aes(y=sysBP, x = factor("")))+ geom_boxplot() + ylab("Systolic Blood Pressure") + xlab(" ")+ coord_flip() + ggtitle("1(a): Distribution of systolic blood pressure")
+# ggplot(patients101, aes(y=sysBP, x = factor("")))+ geom_boxplot() + ylab("Systolic Blood Pressure") + 
+#xlab(" ")+ coord_flip() + ggtitle("1(a): Distribution of systolic blood pressure")
 ```
 
 (d) There is one clear, unusually large observation apparent from the boxplot.  
@@ -45,11 +61,18 @@ boxplot(patients101$sysBP, horizontal = TRUE,main = "Distribution of Systolic Bl
 
 (a)
 
+- `main`: main title
+- `xlab`: x-axis label
+- `ylab`: y-axis label
+- `pch`: control points symbols (`pch = 19` solid circle)
+
 ```{r, echo = FALSE,eval = TRUE}
 #Problem 2 (a)
 plot(patients101$weight, patients101$sysBP, main = "2(a):Relationship between Systolic Blood 
      Pressure and Weight",xlab = "Weight in pounds",ylab = "Systolic BP",pch = 19)
-#qplot(weight, sysBP, data = patients101) + ggtitle("2(a):Relationship between Systolic Blood Pressure and Weight") + xlab("Weight in pounds") + ylab("Systolic BP")
+#qplot(weight, sysBP, data = patients101) +
+#ggtitle("2(a):Relationship between Systolic Blood Pressure and Weight") + 
+#xlab("Weight in pounds") + ylab("Systolic BP")
 ```
 
 (b) There seems to be a slight positive trend; as weight increases, the average systolic blood pressure appears to increase slightly as well.
@@ -58,8 +81,12 @@ plot(patients101$weight, patients101$sysBP, main = "2(a):Relationship between Sy
 
 ```{r, echo = FALSE,eval = TRUE}
 #Problem 2 (c)
-plot(patients101$sedmins, patients101$sysBP, main = "2(c):Relationship between Systolic Blood Pressure and Sedentary Minutes",xlab = "Sedentary Minutes",ylab = "Systolic BP",pch = 19)
-#qplot(sedmins, sysBP, data = patients101) + ggtitle("2(c):Relationship between Systolic Blood Pressure and Sedentary Minutes") + xlab("Sedentary Minutes") + ylab("Systolic BP")
+plot(patients101$sedmins, patients101$sysBP, 
+     main = "2(c):Relationship between Systolic Blood Pressure and Sedentary Minutes",
+     xlab = "Sedentary Minutes",ylab = "Systolic BP",pch = 19)
+#qplot(sedmins, sysBP, data = patients101) +
+#ggtitle("2(c):Relationship between Systolic Blood Pressure and Sedentary Minutes") + 
+#xlab("Sedentary Minutes") + ylab("Systolic BP")
 ```
 
 (d) There does not seem to be a notable trend here.
@@ -71,10 +98,13 @@ plot(patients101$sedmins, patients101$sysBP, main = "2(c):Relationship between S
 
 (a) 
 
+- `formula`: a formula, such as `y ~ grp`, where `y` is a numeric vector of data values to be split into groups according to the grouping variable `grp` (usually a factor). Note that `~ g1 + g2` is equivalent to `g1:g2`.
+
 ```{r, echo = FALSE,eval = TRUE}
 #Problem 3 (a)
-#boxplot(sysBP ~ gender, data = patients101, main = "Blood Pressure by Gender",horizontal = TRUE)
-ggplot(patients101,aes(y = sysBP,x =gender)) + geom_boxplot() + ylab("Systolic Blood Pressure") + xlab("Gender") + ggtitle("Blood Pressure by Gender") + coord_flip() 
+boxplot(sysBP ~ gender, data = patients101, main = "Blood Pressure by Gender",horizontal = TRUE)
+#ggplot(patients101,aes(y = sysBP,x =gender)) + geom_boxplot() + ylab("Systolic Blood Pressure") + 
+# xlab("Gender") + ggtitle("Blood Pressure by Gender") + coord_flip() 
 ```
 
 
@@ -82,10 +112,22 @@ ggplot(patients101,aes(y = sysBP,x =gender)) + geom_boxplot() + ylab("Systolic B
 
 (c)
 
+- `par()`: set or query graphical parameters
 
-```{r, echo = FALSE, fig.height = 3, fig.width = 3.75, fig.align = "center", eval = TRUE}
+With the `par( )` function, you can include the option `mfrow=c(nrows, ncols)` to create a matrix of nrows by ncols plots that are filled in by row. `mfcol=c(nrows, ncols)` fills in the matrix by columns.
+
+```{r, echo = FALSE, fig.height = 6, fig.width = 9, fig.align = "center", eval = TRUE}
 #Problem 3 (c)
-ggplot(patients101, aes(x = sysBP)) + geom_histogram(binwidth = 10,color = "black",fill = "white") + facet_grid(obese ~.) +ggtitle("Systolic Blood Pressure by Obesity")
+par(mfrow = c(3, 1))
+hist(patients101$sysBP[patients101$obese==' normal'], main = "Systolic Blood Pressure (Normal)", 
+     xlab = "sysBP", xlim = c(90, 200))
+hist(patients101$sysBP[patients101$obese==' obese'], main = "Systolic Blood Pressure (Normal)", 
+     xlab = "sysBP", xlim = c(90, 200))
+hist(patients101$sysBP[patients101$obese==' overweight'], main = "Systolic Blood Pressure (Normal)", 
+     xlab = "sysBP", xlim = c(90, 200))
+par(mfrow = c(1, 1))# reset to default
+#ggplot(patients101, aes(x = sysBP)) + geom_histogram(binwidth = 10,color = "black",fill = "white") + 
+#facet_grid(obese ~.) +ggtitle("Systolic Blood Pressure by Obesity")
 ```
 
 (d) The 'Normal' weight category appears to have lower systolic blood pressures on average than 'obese' and 'overweight,' but there does not appear to be much of a difference between 'overweight' and 'obese.'
@@ -95,10 +137,13 @@ ggplot(patients101, aes(x = sysBP)) + geom_histogram(binwidth = 10,color = "blac
 
 4. 
 
+- `round`: rounds the values in its first argument to the specified number of decimal places (default 0)
+- `aggregate`: Splits the data into subsets, computes summary statistics for each, and returns the result in a convenient form.
+
 ```{r, echo = FALSE}
 #Problem 4
 #part(a)
-aveBP = round(mean(patients101$sysBP),4)
+aveBP = round(mean(patients101$sysBP), 4)
 #part(b)
 all.ave = aggregate(sysBP ~ marriage, data = patients101, mean)
 #part(c)
@@ -162,12 +207,7 @@ fns.weight = fivenum(patients101$weight)
 
 (e) The five number summary is: `r fns.weight[1]` (min), `r fns.weight[2]` (Q2), `r fns.weight[3]` (Median), `r fns.weight[4]` (Q3), `r fns.weight[5]` (Max)
 
+Code Appendix
 
-\hrulefill
-\clearpage
-\begin{center} Code Appendix \end{center}
-\begin{verbatim}
 ```{r, ref.label=knitr::all_labels(),echo=TRUE,eval=FALSE}
 ```
-\end{verbatim}
-\end{enumerate}
