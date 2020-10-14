@@ -1,0 +1,83 @@
+---
+title: "STA 138 Discussion 2 Solutions"
+author: "Fall 2020"
+header-includes:
+   - \usepackage{enumerate,graphicx}
+geometry: margin=0.5in
+output: pdf_document
+---
+
+
+\begin{enumerate}
+%Problem 1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```{r,echo=FALSE}
+## 1.(a)
+p1a <- pbinom(30,120,0.2)
+## 1.(b)
+p1b <- 1-pbinom(24-1,120,0.2)
+## 1.(c)
+p1c <- 1-pbinom(25-1,120,0.2)
+```
+\item Suppose that $Y \sim \text{Binomial}(120,0.2)$. 
+\begin{enumerate}[(a)]
+\item $P(Y \le 30) \approx `r round(p1a,4)`$ 
+\item $P(Y \ge 24) \approx `r round(p1b,4)`$
+\item $P(Y \ge 25) \approx `r round(p1c,4)`$
+\end{enumerate}
+%Problem 2%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```{r,echo=FALSE}
+## 2.(a)
+p2a <- dhyper(4,20,80-20,20)
+## 2.(b)
+p2b <- phyper(3,20,80-20,20)
+## 2.(c)
+p2c <- phyper(10,20,80-20,20)
+## 2.(d)
+p2d <- phyper(6,20,80-20,20) - phyper(3,20,80-20,20)
+```
+\item Suppose that $Y \sim \text{Hypergeometric}(80,20,20)$
+\begin{enumerate}[(a)]
+\item $P(Y = 4) \approx `r round(p2a,4)`$
+\item $P(Y \le 3) \approx `r round(p2b,4)`$
+\item $P(Y \le 10) \approx `r round(p2c,4)`$
+\item $P(4 \le Y \le 6) \approx `r round(p2d,4)`$
+\end{enumerate}
+%Problem 3%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```{r,echo=FALSE}
+## 3.(a)
+p3a <- 1-ppois(8,9)
+## 3.(b)
+p3b <- ppois(15,9)-ppois(2,9)
+```
+\item Suppose that $Y \sim \text{Poisson}(9)$
+\begin{enumerate}[(a)]
+\item $P(Y > 8) \approx `r round(p3a,4)`$
+\item $P(3 \le Y \le 15) \approx `r round(p3b,4)`$
+\end{enumerate}
+%Problem 4%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```{r,echo=FALSE}
+## 4.(a)
+p4a <- dbinom(10,10,0.1)
+## 4.(b)
+p4b <- 10*dbinom(10, 10, 0.1)
+## 4.(c)
+p4c <- dmultinom(rep(1,10), prob=rep(0.1,10))
+## 4.(d)
+p4d <- (dmultinom(rep(1,10), prob=rep(0.1,10)) 
+        + dmultinom(c(rep(1,8),2,0), prob=rep(0.1,10)) 
+        + dmultinom(c(rep(1,8),0,2), prob=rep(0.1,10)))
+```
+\item Suppose that $(Y_1,Y_2,\ldots,Y_{10}) \sim \text{Multinomial}(10,0.1,0.1,\ldots,0.1)$. % note: Multinomial(n,\pi_1,\ldots,\pi_c)
+\begin{enumerate}[(a)]
+\item The marginal distribution of $Y_1$ is Binomial$(10,0.1)$, so using this we find $P(Y_1=10) = (0.1)^{10} \approx `r round(p4a,4)`$
+\item Dividing this event into $10$ mutually exclusive events, where the $i$-th, $i=1, \cdots, 10$ event is that all $10$ subjects are assigned to the $i$-th category, we get $\approx `r format(round(p4b,5),scientific=FALSE)`$
+\item Using the multinomial assignment of probabilities, we get $\approx `r format(round(p4c,5),scientific=FALSE)`$
+\item Dividing this event up into the three resulting possible assignments of the two remaining subjects to the categories 9 and 10, and using the multinomial assignment of probabilities, we get $\approx `r format(round(p4d,5),scientific=FALSE)`$
+\end{enumerate}
+\end{enumerate}
+
+
+\clearpage
+\begin{center} Code Appendix \end{center}
+```{r, ref.label=knitr::all_labels(),echo=TRUE,eval=FALSE}
+```

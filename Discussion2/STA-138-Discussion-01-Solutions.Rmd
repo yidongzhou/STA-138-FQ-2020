@@ -29,7 +29,7 @@ For our discussions, we'll only use base R. However, you are highly encouraged t
 
 ```{r, echo = FALSE,eval = TRUE}
 #Problem 1 (a)
-hist(patients101$sysBP, breaks=10, xlab = "Systolic Blood Pressure",main = "Distribution of Systolic Blood 
+hist(patients101$sysBP, breaks=10, xlab = "Systolic Blood Pressure", main = "Distribution of Systolic Blood 
      Pressure 1(a)")
 #ggplot(patients101, aes(x = sysBP)) + geom_histogram(binwidth = 5,color = "black",fill = "white")+
 #xlab("Systolic Blood Pressure")+ggtitle("1(a): Distribution of systolic blood pressure")
@@ -48,7 +48,7 @@ hist(patients101$sysBP, breaks=10, xlab = "Systolic Blood Pressure",main = "Dist
 
 ```{r, echo = FALSE,eval = TRUE}
 #Problem 1 (c)
-boxplot(patients101$sysBP, horizontal = TRUE,main = "Distribution of Systolic Blood Pressure 1(c)")
+boxplot(patients101$sysBP, horizontal = TRUE, main = "Distribution of Systolic Blood Pressure 1(c)")
 # ggplot(patients101, aes(y=sysBP, x = factor("")))+ geom_boxplot() + ylab("Systolic Blood Pressure") + 
 #xlab(" ")+ coord_flip() + ggtitle("1(a): Distribution of systolic blood pressure")
 ```
@@ -108,7 +108,7 @@ boxplot(sysBP ~ gender, data = patients101, main = "Blood Pressure by Gender",ho
 ```
 
 
-(b) The histogram for males and females appear to completely overlap, so they show no significant difference.
+(b) The boxplots for males and females appear to completely overlap, so they show no significant difference.
 
 (c)
 
@@ -119,11 +119,11 @@ With the `par( )` function, you can include the option `mfrow=c(nrows, ncols)` t
 ```{r, echo = FALSE, fig.height = 6, fig.width = 9, fig.align = "center", eval = TRUE}
 #Problem 3 (c)
 par(mfrow = c(3, 1))
-hist(patients101$sysBP[patients101$obese==' normal'], main = "Systolic Blood Pressure (Normal)", 
+hist(patients101$sysBP[patients101$obese==' normal'], main = "Systolic Blood Pressure (Normal)",
      xlab = "sysBP", xlim = c(90, 200))
-hist(patients101$sysBP[patients101$obese==' obese'], main = "Systolic Blood Pressure (Normal)", 
+hist(patients101$sysBP[patients101$obese==' obese'], main = "Systolic Blood Pressure (obese)",
      xlab = "sysBP", xlim = c(90, 200))
-hist(patients101$sysBP[patients101$obese==' overweight'], main = "Systolic Blood Pressure (Normal)", 
+hist(patients101$sysBP[patients101$obese==' overweight'], main = "Systolic Blood Pressure (overweight)",
      xlab = "sysBP", xlim = c(90, 200))
 par(mfrow = c(1, 1))# reset to default
 #ggplot(patients101, aes(x = sysBP)) + geom_histogram(binwidth = 10,color = "black",fill = "white") + 
@@ -143,7 +143,7 @@ par(mfrow = c(1, 1))# reset to default
 ```{r, echo = FALSE}
 #Problem 4
 #part(a)
-aveBP = round(mean(patients101$sysBP), 4)
+aveBP = round(mean(patients101$sysBP), 3)
 #part(b)
 all.ave = aggregate(sysBP ~ marriage, data = patients101, mean)
 #part(c)
