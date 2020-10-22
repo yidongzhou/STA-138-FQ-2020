@@ -1,0 +1,117 @@
+---
+title: "STA 138 Discussion 3 Solutions"
+author: "Fall 2020"
+header-includes:
+   - \usepackage{enumerate,graphicx}
+geometry: margin=0.5in
+output: pdf_document
+---
+
+
+\subsection*{Data analysis}
+
+The table below contains the days on which 350 randomly sampled births occured. 
+\begin{enumerate}[(a)]
+\item Is there evidence at significance level $0.05$ to conclude that the days of the week differ in the proportions of births that occur in them?
+\item Do any of the days of the week stand out to you as seemingly notable in this respect?
+\end{enumerate}
+
+To answer these, we can make a table of observed vs. expected counts:
+
+
+```{r,echo=FALSE}
+library(xtable)
+Obs <- c(33,41,63,63,47,56,47)
+Exp <- sum(Obs)*rep(1/7,7)
+Mat <- cbind(Obs,Exp,(Obs-Exp)^2/Exp)
+  rownames(Mat) <- c("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday")
+# xtable(Mat)
+```
+
+
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rccc}
+  \hline
+ & Observed ($Y_i$) & Expexted ($n\pi_{j0}$) & $(Y_j - n\pi_j)^2/(n\pi_j)$ \\ 
+  \hline
+Sunday & 33.00 & 50.00 & 5.78 \\ 
+  Monday & 41.00 & 50.00 & 1.62 \\ 
+  Tuesday & 63.00 & 50.00 & 3.38 \\ 
+  Wednesday & 63.00 & 50.00 & 3.38 \\ 
+  Thursday & 47.00 & 50.00 & 0.18 \\ 
+  Friday & 56.00 & 50.00 & 0.72 \\ 
+  Saturday & 47.00 & 50.00 & 0.18 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+
+The resulting $\chi^2$ test statistic, obtained by summing over the last column of this table, has value `r sum(Mat[,3])`. From the null distribution ($\chi^2_6$ in this case), then, we get a $p$-value of `r round(1-pchisq(sum(Mat[,3]),6),4)`. As this is less than 0.05, we would reject the null hypothesis here, concluding that there is evidence at this level of non-uniform births over the days of the week.
+
+We can see from the table that the largest single component to the test statistic is from births on Sundays, which are notably less common in our sample than uniformity would suggest.
+
+
+
+
+
+\subsection*{Exam review}
+
+
+\begin{enumerate}
+%% 1.
+\item A salesperson will cold-call ten phone numbers independently chosen from the phonebook. Suppose that, when called, $\frac{1}{100}$ of the numbers in the phone book will result in a big sale, $\frac{9}{100}$ of the numbers will result in a small sale, and the result will result in no sale whatsoever. 
+\begin{enumerate}[(a)]
+\item From the multinomial distribution, we have:
+
+\[\frac{10!}{9!0!1!}\left(\frac{9}{10}\right)^9\left(\frac{9}{100}\right)^1\left(\frac{1}{100}\right)^0 \approx `r round(dmultinom(c(9,1,0),prob=c(9/10,9/100,1/100)),3)`\]
+
+\item Similarly:
+
+\[\frac{10!}{9!1!0!}\left(\frac{9}{10}\right)^9\left(\frac{9}{100}\right)^0\left(\frac{1}{100}\right)^1 \approx `r round(dmultinom(c(9,0,1),prob=c(9/10,9/100,1/100)),3)`\]
+
+\item Multivariate hypergeometric
+\item No, because the sample size would be much smaller than the population size, so the multinomial distribution would approximate the corresponding multivariate hypergeometric.
+\end{enumerate}
+\item Suppose that the numbers of aphids on a tomato plant are recorded each day. Suppose further that some days are sunny and others are cloudy; and on sunny days, the average number of aphids is smaller than it is on cloudy days. We can think of whether the day is cloudy or not as represented by a random coin flip determining whether a Poisson variable with a smaller or larger parameter is being sampled. The recorded numbers of aphids from day to day would then be overdispersed. 
+\item Suppose that a Binomial exact test is carried out with $n=12$ and $\pi_0=0.5$.
+\begin{enumerate}[(a)]
+\item Using the table below, we can compute the probability that the $p-$value is less than or equal to $0.03$ to be approximately $2(0.0029 + 0.0002) = 0.0062$.
+
+
+\item Using the table below, we can compute the probability that the $p-$value is less than or equal to $0.02$ to be approximately $2(0.0029 + 0.0002) = 0.0062$.
+
+\item Using the table below, we can compute the probability that the $p-$value is less than or equal to $0.01$ to be approximately $2(0.0029 + 0.0002) = 0.0062$.
+
+\end{enumerate}
+
+```{r,echo=FALSE}
+pmass <- dbinom(0:12,12,0.5)
+pval <- c(2*pbinom(0:5,12,0.5),1,2*pbinom(5:0,12,0.5))
+# xtable(rbind(0:12,pmass,pval),digits=4)
+```
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lccccccccccccc}
+  \hline
+$x$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 \\ 
+  $P_0(X=x)$ & 0.0002 & 0.0029 & 0.0161 & 0.0537 & 0.1208 & 0.1934 & 0.2256 & 0.1934 & 0.1208 & 0.0537 & 0.0161 & 0.0029 & 0.0002 \\ 
+$p^*$ & 0.0005 & 0.0063 & 0.0386 & 0.1460 & 0.3877 & 0.7744 & 1.0000 & 0.7744 & 0.3877 & 0.1460 & 0.0386 & 0.0063 & 0.0005 \\  
+   \hline
+\end{tabular}
+\end{table}
+
+
+
+\end{enumerate}
+
+
+
+\vfill
+
+\clearpage
+\begin{center} Code Appendix \end{center}
+```{r, ref.label=knitr::all_labels(),echo=TRUE,eval=FALSE}
+```
