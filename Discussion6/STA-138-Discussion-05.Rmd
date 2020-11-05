@@ -1,0 +1,47 @@
+---
+title: "STA 138 Discussion 5"
+author: "Fall 2020"
+header-includes: \usepackage{enumerate,graphicx,nicefrac}
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+geometry: margin=0.5in
+---
+
+
+\section*{Maximum likelihood estimation by numerical methods}
+\emph{For our discussion this week, we will further explore maximum likelihood estimation with numerical methods.}
+
+\begin{enumerate}
+\item \emph{MLE under the multinomial model}
+
+Suppose that Amelia has sampled 76 newts out of a tank. There are four species in the tank (A, B, C, and D); the observed counts are given in the table below.
+
+
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+  A & B & C & D \\ 
+  \hline
+  14 & 22 & 25 & 15 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+
+
+
+
+Use numerical methods to obtain the maximum likelihood estimate of the relative proportions of the four species of newt in the tank.
+
+
+\item \emph{Constrained estimation}
+
+Beatrice, the lab assistant, feeds the newts in the tank regularly. She takes particular notice when she does so of the brightly colored species A and B. From her experience, she claims that 20\% of the newts in the tank are from species A, and 30\% from species B. 
+
+Assuming that she is correct, use numerical methods to obtain the MLE of the proportions of the species in the tank.
+
+\end{enumerate}
