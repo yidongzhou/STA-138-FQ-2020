@@ -51,7 +51,7 @@ It only remains for us to maximize this function over possible freely varying va
 ```{r}
 init <- rep(0.25,3)
 optOutput <- optim(init,
-       fn = function(freePi){ -multinomLik( allPi( freePi ) ) }
+       fn = function(freePi){ -multinomLik( allPi( freePi)) }
        )
 ```
 
