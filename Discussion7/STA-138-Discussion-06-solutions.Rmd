@@ -1,0 +1,113 @@
+---
+title: "STA 138 Discussion 6 -- solutions"
+author: "Fall 2020"
+header-includes:
+   - \usepackage{enumerate,graphicx,nicefrac,amsmath}
+   - \DeclareMathOperator*{\argmax}{arg\,max}
+geometry: margin=0.5in
+output: pdf_document
+---
+
+
+\section*{Likelihood ratio tests for multinomial models}
+\emph{For our discussion this week, we will implement likelihood ratio tests. To do so, we'll pic up where we left off last week.}
+
+
+Suppose that Amelia has sampled 76 newts out of a tank. There are four species in the tank (A, B, C, and D); the observed counts are given in the table below.
+
+
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+  A & B & C & D \\ 
+  \hline
+  14 & 22 & 25 & 15 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+Beatrice, the lab assistant, feeds the newts in the tank regularly. She takes particular notice when she does so of the brightly colored species A and B. From her experience, she claims that 20% of the newts in the tank are from species A, and 30% from species B. 
+
+Assuming that she is correct, use numerical methods to obtain the MLE of the proportions of the species in the tank.
+
+In the problems below, we will interpret the test results individually; there's no need to control for multiple testing. We'll carry out each test at $\alpha=0.01$.
+
+\begin{enumerate}
+\item Let's test whether we can rule out the possibility that the four species in the tank exist in equal proportions. Carry out a likelihood ratio test of
+\[H_0:\pi_1=\pi_2=\pi_3=\pi_4=0.25\] against \[H_1:\pi_i \ne \pi_j \text{ for some } i \neq j\]
+
+Remember that the likelihood ratio test asks us to compare sets of possible parameters $\Theta_0$ and $\Theta$, where the former represents the null hypothesis. In this case, let's write
+
+\[\Theta_0 = \{(\pi_1,\pi_2,\pi_3,\pi_4): \pi_1=\pi_2=\pi_3=\pi_4=0.25 \}\]
+
+and
+
+\[\Theta = \left\{(\pi_1,\pi_2,\pi_3,\pi_4): 0 \le \pi_1,\pi_2,\pi_3,\pi_4 \le 1, \sum_{j=1}^4 \pi_j = 1\right\}\]
+
+```{r,echo=FALSE}
+## problem 1
+y <-  c(14, 22, 25, 15)
+lik0 <- dmultinom(y,prob=rep(0.25,4))
+lik1 <- 0.00160
+lrtstat <- -2*log(lik0/lik1)
+pval <- 1-pchisq(lrtstat,3)
+```
+
+We can find without difficulty that the maximum likelihood under $H_0$ is
+\[\argmax_{\pi \in \Theta_0} L(\pi,y) = L(\pi_0,y) \approx `r format(round(lik0,5),scientific=FALSE)`\ .\]
+
+Furthermore, we found last week that
+\[\argmax_{\pi \in \Theta} L(\pi,y) \approx 0.00160\ .\]
+
+Is the difference between these significant at $\alpha=0.01$? From the above, we compute the LRT statistic to be `r round(lrtstat,5)`. Because $\Theta$ has $\dim(\Theta)=3$ freely varying parameters, and $\Theta_0$ has none, we use this in combination with a $\chi^2$ distribution with $3-0=3$ degrees of freedom to obtain $p-$value `r round(pval,3)`.
+
+So, at $\alpha=0.01$, we fail to reject $H_0$.
+
+\item Let's put Beatrice's claim to the test: using a likelihood ratio test, test \[H_0:\pi_1=0.2,\pi_2=0.3\] against \[H_1:\pi_1 \ne 0.2 \text{ or } \pi_2\ne 0.3\]
+
+```{r,echo=FALSE}
+## problem 2
+lik0 <- 0.00143
+lrtstat <- -2*log(lik0/lik1)
+pval <- 1-pchisq(lrtstat,2)
+```
+
+
+Here $\Theta_1$ is as it was in the previous problem, while \[\Theta_0 = \{(\pi_1,\pi_2,\pi_3,\pi_4): \pi_1=0.2,\pi_2=0.3,0\le \pi_3,\pi_4\le1, \pi_3+\pi_4=0.5 \}\]
+
+Since $\Theta_0$ now has one freely varying parameter, we have $\dim(\Theta_0)=1$.
+
+Last week, we found that 
+\[\argmax_{\pi \in \Theta_0} L(\pi,y) \approx 0.00143\ .\]
+
+This gives us LRT statistic `r round(lrtstat,5)`, and, from the $\chi^2_{3-1}$ null distribution, we get $p-$value `r round(pval,3)`. So, we fail to reject this this claim as well.
+
+
+
+
+\item \emph{Assuming that Beatrice's claim is true}, let's test whether there is evidence to rule out the possibility that species C and D occur in the tank in equal proportions. \[H_0:\pi_1=0.2,\pi_2=0.3,\pi_3=\pi_4=0.25\] against \[H_1: \pi_1=0.2 \text{ and }\pi_2=0.3 \text{ but either } \pi_3 \ne 0.25 \text{ or } \pi_4\ne 0.25\]
+
+```{r,echo=FALSE}
+## problem 3
+lik1 <- lik0
+lik0 <- dmultinom(y,prob=c(0.2,0.3,0.25,0.25))
+lrtstat <- -2*log(lik0/lik1)
+pval <- 1-pchisq(lrtstat,1)
+```
+
+Here, we have \[\Theta = \{(\pi_1,\pi_2,\pi_3,\pi_4): \pi_1=0.2,\pi_2=0.3,0\le \pi_3,\pi_4\le1, \pi_3+\pi_4=0.5 \}\]
+
+and \[\Theta_0 = \{(\pi_1,\pi_2,\pi_3,\pi_4): \pi_1=0.2, 0.3, \pi_3=\pi_4=0.25 \}\]
+
+This gives us LRT statistic `r round(lrtstat,5)`, and, from the $\chi^2_{1-0}$ null distribution, we get $p-$value `r round(pval,3)`. So, we fail to reject this this claim too!
+
+
+\end{enumerate}
+
+
+\subsection*{Appendix: R Script}
+
+```{r, ref.label=knitr::all_labels(),echo=TRUE,eval=FALSE}
+```

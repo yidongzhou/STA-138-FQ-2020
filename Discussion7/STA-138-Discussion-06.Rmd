@@ -1,0 +1,49 @@
+---
+title: "STA 138 Discussion 6 -- solutions"
+author: "Fall 2020"
+header-includes:
+   - \usepackage{enumerate,graphicx,nicefrac,amsmath}
+   - \DeclareMathOperator*{\argmax}{arg\,max}
+geometry: margin=0.5in
+output: pdf_document
+---
+
+
+\section*{Likelihood ratio tests for multinomial models}
+\emph{For our discussion this week, we will implement likelihood ratio tests. To do so, we'll pic up where we left off last week.}
+
+
+Suppose that Amelia has sampled 76 newts out of a tank. There are four species in the tank (A, B, C, and D); the observed counts are given in the table below.
+
+
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+  A & B & C & D \\ 
+  \hline
+  14 & 22 & 25 & 15 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+Beatrice, the lab assistant, feeds the newts in the tank regularly. She takes particular notice when she does so of the brightly colored species A and B. From her experience, she claims that 20% of the newts in the tank are from species A, and 30% from species B. 
+
+Assuming that she is correct, use numerical methods to obtain the MLE of the proportions of the species in the tank.
+
+In the problems below, we will interpret the test results individually; there's no need to control for multiple testing. We'll carry out each test at $\alpha=0.01$.
+
+\begin{enumerate}
+\item Let's test whether we can rule out the possibility that the four species in the tank exist in equal proportions. Carry out a likelihood ratio test of
+\[H_0:\pi_1=\pi_2=\pi_3=\pi_4=0.25\] against \[H_1:\pi_i \ne \pi_j \text{ for some } i \neq j\]
+
+
+\item Let's put Beatrice's claim to the test: using a likelihood ratio test, test \[H_0:\pi_1=0.2,\pi_2=0.3\] against \[H_1:\pi_1 \ne 0.2 \text{ or } \pi_2\ne 0.3\]
+
+
+
+\item \emph{Assuming that Beatrice's claim is true}, let's test whether there is evidence to rule out the possibility that species C and D occur in the tank in equal proportions. \[H_0:\pi_1=0.2,\pi_2=0.3,\pi_3=\pi_4=0.25\] against \[H_1: \pi_1=0.2 \text{ and }\pi_2=0.3 \text{ but either } \pi_3 \ne 0.25 \text{ or } \pi_4\ne 0.25\]
+
+\end{enumerate}
+
