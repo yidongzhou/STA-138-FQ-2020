@@ -1,5 +1,5 @@
 ---
-title: "STA 138 Discussion 6 -- solutions"
+title: "STA 138 Discussion 6"
 author: "Fall 2020"
 header-includes:
    - \usepackage{enumerate,graphicx,nicefrac,amsmath}
@@ -10,7 +10,7 @@ output: pdf_document
 
 
 \section*{Likelihood ratio tests for multinomial models}
-\emph{For our discussion this week, we will implement likelihood ratio tests. To do so, we'll pic up where we left off last week.}
+\emph{For our discussion this week, we will implement likelihood ratio tests. To do so, we'll pick up where we left off last week.}
 
 
 Suppose that Amelia has sampled 76 newts out of a tank. There are four species in the tank (A, B, C, and D); the observed counts are given in the table below.
