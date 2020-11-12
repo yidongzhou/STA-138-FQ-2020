@@ -52,6 +52,7 @@ y <-  c(14, 22, 25, 15)
 lik0 <- dmultinom(y,prob=rep(0.25,4))
 lik1 <- 0.00160
 lrtstat <- -2*log(lik0/lik1)
+# df = 3-0 = 3
 pval <- 1-pchisq(lrtstat,3)
 ```
 
@@ -92,7 +93,7 @@ This gives us LRT statistic `r round(lrtstat,5)`, and, from the $\chi^2_{3-1}$ n
 ```{r,echo=FALSE}
 ## problem 3
 lik1 <- lik0
-lik0 <- dmultinom(y,prob=c(0.2,0.3,0.25,0.25))
+lik0 <- dmultinom(y, prob=c(0.2,0.3,0.25,0.25))
 lrtstat <- -2*log(lik0/lik1)
 pval <- 1-pchisq(lrtstat,1)
 ```
