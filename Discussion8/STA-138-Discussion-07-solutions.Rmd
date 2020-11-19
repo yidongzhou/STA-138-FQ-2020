@@ -1,0 +1,152 @@
+---
+title: "STA 138 Discussion 7 -- solutions"
+author: "Fall 2020"
+header-includes:
+   - \usepackage{enumerate,graphicx,nicefrac,amsmath}
+   - \DeclareMathOperator*{\argmax}{arg\,max}
+geometry: margin=0.5in
+output: pdf_document
+---
+
+\begin{enumerate}
+\item 
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lcc}
+  \hline
+ & $C$ & $D$ \\ 
+  \hline
+$A$ & 16 &  110 \\ 
+$B$   &  4 &  20 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+In the table above, you can find the results of an experiment by Kahneman and Tversky on peoples' risk preferences. The experiment consisted of eliciting choices by people for two decisions:
+
+\begin{enumerate}[(i)]
+\item Choose between:
+\begin{enumerate}
+\item[A.] a sure gain of \$240
+\item[B.] 25\% chance for \$1000 gain, 75\% chance for \$0 gain
+\end{enumerate}
+\item Choose between:
+\begin{enumerate}
+\item[C.] a sure loss of \$750
+\item[D.] 75\% chance to lose \$1000, 25\% chance to lose \$0
+\end{enumerate}
+\end{enumerate}
+
+When people choose $B$ over $A$, we take them to be "risk loving" in choice (i); similarly, we take people who choose $D$ over $C$ to be "risk loving" in choice (ii). For the moment you can assume that our large sample approximation holds for this contingency table.
+
+\begin{enumerate}
+\item What do you estimate to be the odds ratio of choosing $B$ for $D$ vs. $C$? What does this tell you about risk preferences between the two choices?
+
+The odds ratio here is \[ \frac{\nicefrac{20}{110}}{\nicefrac{4}{16}} \approx `r round((20/110)/(4/16),2)` \ .\]
+From this we can conclude that, among people sampled, people are \emph{less} likely to be risk loving in choice (i) if they are risk loving in (ii) than otherwise. 
+
+\item Can you, using Pearson's $\chi^2$ test of independence, conclude that risk lovingness for (i) has an "effect" on risk livingess for (ii), at significance level $\alpha=0.1$?
+
+```{r,echo=FALSE}
+O <- matrix(c(16,110,
+               4,20),
+             byrow=TRUE,
+             ncol=2) # observed
+E <- rowSums(O)%*%t(colSums(O))/sum(O) # expected
+pearsonStatistic <- sum((O-E)^2/E)
+pearsonpVal <- 1-pchisq(pearsonStatistic,1) # df = 1 !
+LRstatistic <- -2*sum(O*log(E/O))
+LRpVal <- 1-pchisq(LRstatistic,1)
+
+```
+
+We have here a Pearson $\chi^2$ test of independence with statistic
+\[  \sum_{ij} \frac{(O_{ij}-E_{ij})^2}{E_{ij}} \approx `r round(pearsonStatistic,4)`\]
+From the $\chi^2_1$ null distribution, then, we get p-value `r round(pearsonpVal,4)`, and fail to reject the null hypothesis of independence at $\alpha = 0.1$. So, we conclude that this is not sufficient evidence to conclude definitively that the population from which these people are sampled has the risk preferences obtained here.
+
+\item Can you, using a likelihood ratio test, conclude that risk lovingness for (i) has an "effect" on risk livingess for (ii), at significance level $\alpha=0.1$? 
+
+In this case we have a L-R test of independence with statistic
+\[  -2\sum_{ij} O_{ij}\log\left(\nicefrac{E_{ij}}{O_{ij}}\right) \approx `r round(LRstatistic,4)`\]
+From the $\chi^2_1$ null distribution, then, we get p-value `r round(LRpVal,4)`, and fail to reject the null hypothesis of independence at $\alpha = 0.1$. So, we conclude that this is not sufficient evidence to conclude definitively that the population from which these people are sampled has the risk preferences obtained here.
+
+\end{enumerate}
+
+
+\item 
+
+```{r,echo=FALSE}
+counts <- matrix(c(79, 11, 
+                   222, 19, 
+                   169, 7, 
+                   97, 8, 
+                   107, 11, 
+                   134, 9, 
+                   133, 7, 
+                   151, 16),
+                 nrow=2)
+timePeriods <- c("<2000 B.C.",
+                      "2000-500 B.C.",
+                      "500 B.C.-500 A.D.", 
+                      "500-1200 A.D.",
+                      "1200-1500 A.D.",
+                      "1500-1700 A.D.",
+                      "1700-1850 A.D.", 
+                      ">1850 A.D.")
+colnames(counts) <- c(as.roman(1:8))
+rownames(counts) <- c("right","left")
+O <- counts # observed
+E <- rowSums(O)%*%t(colSums(O))/sum(O) # expected
+pearsonStatistic <- sum((O-E)^2/E)
+pearsonpVal <- 1-pchisq(pearsonStatistic,7) # df = 7 !
+LRstatistic <- -2*sum(O*log(E/O))
+LRpVal <- 1-pchisq(LRstatistic,7)
+```
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{clllll}
+  \hline
+ & I: & $<$2000 B.C. &   & V: & 1200-1500 A.D. \\ 
+   & II: & 2000-500 B.C. &   & VI: & 1500-1700 A.D. \\ 
+   & III: & 500 B.C.-500 A.D. &   & VII: & 1700-1850 A.D. \\ 
+   & IV: & 500-1200 A.D. &   & VIII: & $>$1850 A.D. \\ 
+   \hline
+\end{tabular}
+\caption{Time periods}
+\end{table}
+
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lcccccccc}
+  \hline
+ & I & II & III & IV & V & VI & VII & VIII \\ 
+  \hline
+right &  79 & 222 & 169 &  97 & 107 & 134 & 133 & 151 \\ 
+  left &  11 &  19 &   7 &   8 &  11 &   9 &   7 &  16 \\ 
+   \hline
+\end{tabular}
+\caption{Contingency table}
+\end{table}
+
+A study counted the numbers of depictions of right- and left- handed people in artwork (Table 2) over different time periods (Table 1). Assuming that the artworks were randomly sampled, can you conclude that the relative frequencies of left- and right- handedness change over time?
+
+If we choose to use Pearson's $\chi^2$ test here, we will get 
+
+\[  \sum_{ij} \frac{(O_{ij}-E_{ij})^2}{E_{ij}} \approx `r round(pearsonStatistic,4)`\]
+From the $\chi^2_7$ null distribution, then, we get p-value `r round(pearsonpVal,4)`. Not given a significance level, we choose one: let's say 0.01. With this significance level, we fail to reject $H_0$, and conclude that there is not sufficient evidence to conclude definitively that there is an "effect" of time period on depictions of handedness.
+
+If instead we used a LR test here, we would get statistic `r round(LRstatistic,4)` and p-value `r round(LRpVal,4)`, yielding the same result.
+
+\end{enumerate}
+
+\vfill
+
+\pagebreak
+
+\subsection*{Appendix: R Script}
+
+```{r, ref.label=knitr::all_labels(),echo=TRUE,eval=FALSE}
+```
