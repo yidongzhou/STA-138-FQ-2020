@@ -1,0 +1,253 @@
+---
+title: "STA 138 Discussion 8 -- solutions"
+author: "Fall 2020"
+header-includes:
+   - \usepackage{enumerate,graphicx,nicefrac,amsmath,verbatim}
+   - \DeclareMathOperator*{\argmax}{arg\,max}
+geometry: margin=0.5in
+output: pdf_document
+---
+
+For this discussion we will explore logistic regression models using \verb+wine.csv+, containing data regarding the quality of wines.
+
+He have here three variables, "quality," "SO2," and "pH," recorded for each of 1599 wine samples:
+\begin{itemize}
+\item quality (binary): 1 if high quality, 0 otherwise
+\item SO2 (binary): 1 if high sulfur dioxide levels, 0 o.w.
+\item pH (numeric): pH of the wine
+\end{itemize}
+
+Let's let \[ x_1 = \begin{cases}
+1 \quad \text{ if SO2}=1\\ 
+0 \quad \text{ if SO2}=0\ ,
+\end{cases}\]
+\[ x_2 = \text{pH}\ ,\]
+and
+\[x_3 = x_1\cdot x_2\ . \]
+
+```{r,echo=FALSE}
+wine <- read.csv("wine.csv")
+```
+
+\begin{enumerate}
+\item Consider the model \[\log\left(\frac{\pi}{1-\pi}\right)= \alpha + \beta_1 x_1\ .\]
+\begin{enumerate}
+\item What are the estimated parameters for this model?
+\item Interpret the parameters.
+\end{enumerate}
+
+```{r,echo=FALSE}
+#### problem 1
+fittedModel <- glm(quality~SO2, family=binomial, data=wine)
+```
+
+The estimated parameters here are \[\hat\alpha = `r coefficients(fittedModel)[1]`\] and \[\hat\beta_1 = `r coefficients(fittedModel)[2]`\ .\]
+
+SO2 here is binary, and low SO2 is the `baseline' case. The estimated log-odds for low SO2 wine according to this model are $\hat\alpha$, which corresponds to estimated odds of `r exp(coefficients(fittedModel)[1])`, and estimated probability of `r plogis(coefficients(fittedModel)[1])` of high quality for a low-SO2 wine.
+
+The estimated log-odds ratio of high quality for high SO2 vs. low SO2 wines is $\hat\beta_1$. Thus, estimated odds of high quality for high SO2 wines under this model are `r exp(coefficients(fittedModel)[2])` times those of low SO2 wines.
+
+So, this model suggests that wines with low SO2 are more likely to be high quality.
+
+\item Consider the model \[\log\left(\frac{\pi}{1-\pi}\right)= \alpha + \beta_2 x_2\ .\]
+\begin{enumerate}
+\item What are the estimated parameters for this model?
+\item Interpret the parameters.
+\item Plot both the fitted log-odds and fitted probability of high quality for wines as a function of pH.
+\end{enumerate}
+
+```{r,echo=FALSE}
+#### problem 2
+fittedModel2 <- glm(quality~pH, family=binomial, data=wine)
+```
+
+The estimated parameters here are \[\hat\alpha = `r coefficients(fittedModel2)[1]`\] and \[\hat\beta_2 = `r coefficients(fittedModel2)[2]`\ .\]
+
+pH here is continuous, and pH$=0$ is the `baseline' case. The estimated log-odds for pH$=0$ wine according to this model are $\hat\alpha$. This is not really interpretable in itself, because pH 0 wines would be really bad for the digestion and generally not advisable to drink, and maybe more importantly they don't exist.
+
+The estimated log-odds ratio of high quality for wines with a one-unit difference in pH's is $\hat\beta_2$. Thus, the estimated odds of high quality for a wine with pH that is one higher than that of another one under this model are `r exp(coefficients(fittedModel2)[2])` times those of the other.
+
+So, this model suggests that wines with higher pH's (i.e. wines that are less acidic) are less likely to be high quality than those with lower pH's (i.e. those that are more acidic) (see Figures 1 and 2 below).
+
+```{r,echo=FALSE}
+logOdds_2 <- function(x){predict(fittedModel2,data.frame(pH=x))}
+pi_2 <- function(x){plogis(predict(fittedModel2,data.frame(pH=x)))}
+## note:
+## In R, the logistic function is evaluated by plogis()
+## (CDF of logistic distribution)
+## and the logit function is evaluated by qlogis()
+## (quantile funciton of logistic distribution)
+## Furthermore, predict() here will give fitted log-odds.
+```
+
+\item Consider the model \[\log\left(\frac{\pi}{1-\pi}\right)= \alpha + \beta_1 x_1+ \beta_2 x_2\ .\]
+\begin{enumerate}
+\item What are the estimated parameters for this model?
+\item Interpret the parameters.
+\item Plot both the fitted log-odds and fitted probability of high quality for wines as a function of pH and SO2.
+\end{enumerate}
+
+```{r,echo=FALSE}
+#### problem 3
+fittedModel3 <- glm(quality~SO2+pH, family=binomial, data=wine)
+```
+
+The estimated parameters here are \[\hat\alpha = `r coefficients(fittedModel3)[1]`\ ,\] \[\hat\beta_1 = `r coefficients(fittedModel3)[2]`\ ,\] and \[\hat\beta_2 = `r coefficients(fittedModel3)[3]`\ .\]
+
+pH$=0$ and low SO2 is the `baseline' case. The estimated log-odds for such wine according to this model are $\hat\alpha$. This is, again, not really interpretable in itself, because pH 0 wines are still not a thing.
+
+All other things equal, the estimated log-odds ratio of high quality for high SO2 vs. low SO2 wines is $\hat\beta_1$. Thus, estimated odds of high quality for high SO2 wines under this model are `r exp(coefficients(fittedModel3)[2])` times those of low SO2 wines, holding pH constant.
+
+All other things equal, the estimated log-odds ratio of high quality for wines with a one-unit difference in pH's is $\hat\beta_2$. Thus, the estimated odds of high quality for a wine with pH that is one higher than that of another one under this model are `r exp(coefficients(fittedModel3)[3])` times those of the other, holding SO2 constant.
+
+So, this model suggests that wines with higher pH's (i.e. wines that are less acidic) are less likely to be high quality than those with lower pH's (i.e. those that are more acidic) (see Figures 3 and 4 below).
+
+```{r,echo=FALSE}
+logOdds0_3 <- function(x){predict(fittedModel3,data.frame(pH=x,SO2=0))}
+logOdds1_3 <- function(x){predict(fittedModel3,data.frame(pH=x,SO2=1))}
+pi0_3 <- function(x){plogis(predict(fittedModel3,data.frame(pH=x,SO2=0)))}
+pi1_3 <- function(x){plogis(predict(fittedModel3,data.frame(pH=x,SO2=1)))}
+```
+
+\item Consider the model \[\log\left(\frac{\pi}{1-\pi}\right)= \alpha + \beta_1 x_1+ \beta_2 x_2 + \beta_3x_3\ .\]
+\begin{enumerate}
+\item What are the estimated parameters for this model?
+\item Interpret the parameters.
+\item Plot both the fitted log-odds and fitted probability of high quality for wines as a function of pH and SO2.
+\end{enumerate}
+
+```{r,echo=FALSE}
+#### problem 4
+fittedModel4 <- glm(quality~SO2+pH+SO2:pH, family=binomial, data=wine)
+logOdds0_4 <- function(x){predict(fittedModel4,data.frame(pH=x,SO2=0))}
+logOdds1_4 <- function(x){predict(fittedModel4,data.frame(pH=x,SO2=1))}
+pi0_4 <- function(x){plogis(predict(fittedModel4,data.frame(pH=x,SO2=0)))}
+pi1_4 <- function(x){plogis(predict(fittedModel4,data.frame(pH=x,SO2=1)))}
+```
+
+The estimated parameters here are \[\hat\alpha = `r coefficients(fittedModel4)[1]`\ ,\] \[\hat\beta_1 = `r coefficients(fittedModel4)[2]`\ ,\] \[\hat\beta_2 = `r coefficients(fittedModel4)[3]`\ ,\] and \[\hat\beta_3 = `r coefficients(fittedModel4)[4]`\ .\]
+
+For low SO2 wines, we have fitted model \[\log\left(\frac{\pi}{1-\pi}\right)= \hat\alpha + \hat\beta_2 x_2 = `r coefficients(fittedModel4)[1]` `r coefficients(fittedModel4)[3]`x_2\ ,\]
+while for high SO2 wines we have fitted model
+\[\log\left(\frac{\pi}{1-\pi}\right)= (\hat\alpha + \hat\beta_1) + (\hat\beta_2+\hat\beta_3) x_2 = `r coefficients(fittedModel4)[1]+coefficients(fittedModel4)[2]` + `r coefficients(fittedModel4)[3] + coefficients(fittedModel4)[4]`x_2\ .\]
+
+So, under this model, the chances of high quality are increasing in pH for high SO2 wines, while they are decreasing in pH for low SO2 wines (see Figures 5 and 6).
+
+\end{enumerate}
+
+```{r,echo=FALSE,fig.align='center'}
+plot(logOdds_2,
+     from=2.5,
+     to=4.5,
+     ylab="Log odds of high rating",
+     xlab="Wine pH",
+     main="Figure 1: Log odds linear in pH")
+## note we should plot over a range of values of pH that are represented in the sample
+```
+
+```{r,echo=FALSE,fig.align='center'}
+plot(pi_2,
+     from=2.5,
+     to=4.5,
+     ylab="Probability of high rating",
+     xlab="Wine pH",
+     main="Figure 2: Log odds linear in pH")
+```
+
+
+```{r,echo=FALSE,fig.align='center'}
+plot(logOdds0_3,
+     from=2.5,
+     to=4.5,
+     ylim=c(-4.5,-0.5),
+     ylab="Log odds of high rating",
+     xlab="Wine pH",
+     main="Figure 3: Log odds linear in pH and SO2")
+plot(logOdds1_3,
+     from=2.5,
+     to=4.5,
+     col="blue",
+     add=TRUE)
+legend(4,-0.5,
+       legend=c(
+         expression('Low SO'[2]),
+         expression('High SO'[2])
+         ),
+       col=c("black","blue"),
+       lwd=1)
+```
+
+```{r,echo=FALSE,fig.align='center'}
+plot(pi0_3,
+     from=2.5,
+     to=4.5,
+     ylim=c(0,0.4),
+     ylab="Probability of high rating",
+     xlab="Wine pH",
+     main="Figure 4: Log odds linear in pH and SO2")
+plot(pi1_3,
+     from=2.5,
+     to=4.5,
+     col="blue",
+     add=TRUE)
+legend(4,0.35,
+       legend=c(
+         expression('Low SO'[2]),
+         expression('High SO'[2])
+         ),
+       col=c("black","blue"),
+       lwd=1)
+```
+
+```{r,echo=FALSE,fig.align='center'}
+plot(logOdds0_4,
+     from=2.5,
+     to=4.5,
+     ylim=c(-5,0),
+     ylab="Log odds of high rating",
+     xlab="Wine pH",
+     main="Figure 5: Log odds linear in pH, SO2, and interaction")
+plot(logOdds1_4,
+     from=2.5,
+     to=4.5,
+     col="blue",
+     add=TRUE)
+legend(2.5,-1.5,
+       legend=c(
+         expression('Low SO'[2]),
+         expression('High SO'[2])
+         ),
+       col=c("black","blue"),
+       lwd=1)
+```
+
+```{r,echo=FALSE,fig.align='center'}
+plot(pi0_4,
+     from=2.5,
+     to=4.5,
+     ylab="Probability of high rating",
+     xlab="Wine pH",
+     main="Figure 6: Log odds linear in pH, SO2, and interaction")
+plot(pi1_4,
+     from=2.5,
+     to=4.5,
+     col="blue",
+     add=TRUE)
+legend(2.5,0.2,
+       legend=c(
+         expression('Low SO'[2]),
+         expression('High SO'[2])
+         ),
+       col=c("black","blue"),
+       lwd=1)
+```
+
+\vfill
+
+\pagebreak
+
+\subsection*{Appendix: R Script}
+
+```{r, ref.label=knitr::all_labels(),echo=TRUE,eval=FALSE}
+```
+

@@ -1,0 +1,59 @@
+---
+title: "STA 138 Discussion 8"
+author: "Fall 2020"
+header-includes:
+   - \usepackage{enumerate,graphicx,nicefrac,amsmath,verbatim}
+   - \DeclareMathOperator*{\argmax}{arg\,max}
+geometry: margin=0.5in
+output: pdf_document
+---
+
+For this discussion we will explore logistic regression models using \verb+wine.csv+, containing data regarding the quality of wines.
+
+He have here three variables, "quality," "SO2," and "pH," recorded for each of 1599 wine samples:
+\begin{itemize}
+\item quality (binary): 1 if high quality, 0 otherwise
+\item SO2 (binary): 1 if high sulfur dioxide levels, 0 o.w.
+\item pH (numeric): pH of the wine
+\end{itemize}
+
+Let's let \[ x_1 = \begin{cases}
+1 \quad \text{ if SO2}=1\\ 
+0 \quad \text{ if SO2}=0\ ,
+\end{cases}\]
+\[ x_2 = \text{pH}\ ,\]
+and
+\[x_3 = x_1\cdot x_2\ . \]
+
+```{r,echo=FALSE}
+wine <- read.csv("wine.csv")
+```
+
+\begin{enumerate}
+\item Consider the model \[\log\left(\frac{\pi}{1-\pi}\right)= \alpha + \beta_1 x_1\ .\]
+\begin{enumerate}
+\item What are the estimated parameters for this model?
+\item Interpret the parameters.
+\end{enumerate}
+
+\item Consider the model \[\log\left(\frac{\pi}{1-\pi}\right)= \alpha + \beta_2 x_2\ .\]
+\begin{enumerate}
+\item What are the estimated parameters for this model?
+\item Interpret the parameters.
+\item Plot both the fitted log-odds and fitted probability of high quality for wines as a function of pH.
+\end{enumerate}
+
+\item Consider the model \[\log\left(\frac{\pi}{1-\pi}\right)= \alpha + \beta_1 x_1+ \beta_2 x_2\ .\]
+\begin{enumerate}
+\item What are the estimated parameters for this model?
+\item Interpret the parameters.
+\item Plot both the fitted log-odds and fitted probability of high quality for wines as a function of pH and SO2.
+\end{enumerate}
+
+\item Consider the model \[\log\left(\frac{\pi}{1-\pi}\right)= \alpha + \beta_1 x_1+ \beta_2 x_2 + \beta_3x_3\ .\]
+\begin{enumerate}
+\item What are the estimated parameters for this model?
+\item Interpret the parameters.
+\item Plot both the fitted log-odds and fitted probability of high quality for wines as a function of pH and SO2.
+\end{enumerate}
+\end{enumerate}
